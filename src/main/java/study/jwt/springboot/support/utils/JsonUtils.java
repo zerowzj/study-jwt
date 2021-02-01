@@ -6,7 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.InputStream;
 
 @Slf4j
-public class JsonUtils {
+public final class JsonUtils {
+
+    private JsonUtils() {
+
+    }
 
     public static String toJson(Object obj) {
         return JSON.toJSONString(obj);

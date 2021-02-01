@@ -12,18 +12,14 @@ import java.util.Map;
 public class WebUtils {
 
     /**
-     * ====================
      * <p>
-     * ====================
      */
     public static String getBodyText(HttpServletRequest request) {
         return null;
     }
 
     /**
-     * ====================
      * 转换Http
-     * ====================
      */
     public static HttpServletRequest toHttp(ServletRequest servletRequest) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -36,18 +32,14 @@ public class WebUtils {
     }
 
     /**
-     * ====================
      * 获取请求头
-     * ====================
      */
     public static String getHeader(HttpServletRequest request, String name) {
         return request.getHeader(name);
     }
 
     /**
-     * ====================
      * 发送状态码
-     * ====================
      */
     public static void sendError(HttpServletResponse response, int statusCode) {
         sendError(response, statusCode, null);
@@ -62,9 +54,7 @@ public class WebUtils {
     }
 
     /**
-     * ====================
      * 输出信息
-     * ====================
      */
     public static void write(HttpServletResponse response, Map<String, Object> result) {
         PrintWriter writer = null;

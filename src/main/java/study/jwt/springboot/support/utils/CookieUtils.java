@@ -11,9 +11,7 @@ public final class CookieUtils {
     }
 
     /**
-     * ====================
      * 创建Cookie
-     * ====================
      */
     public static Cookie newCookie(String name, String value) {
         return newCookie(name, value, DEFAULT_EXPIRY);
@@ -31,9 +29,7 @@ public final class CookieUtils {
     }
 
     /**
-     * ====================
      * 是否包含某Cookie
-     * ====================
      */
     public static boolean contain(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
@@ -51,9 +47,7 @@ public final class CookieUtils {
     }
 
     /**
-     * ====================
      * 获取Cookie值
-     * ====================
      */
     public static String getValue(HttpServletRequest request, String cookieName) {
         String value = null;
