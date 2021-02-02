@@ -21,17 +21,34 @@ public class JwtUtils {
         return createJwt(claims, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
     }
 
+    public static String createJwt(Map<String, Object> claims, SignAlg signAlg) {
+        return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
+    }
+
     public static String createJwt(Map<String, Object> claims, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
         if (secretKey == null) {
             secretKey = DEFAULT_SECRET_KEY;
         }
         JwtBuilder builder = Jwts.builder()
-                .setSubject("qweqwe")
                 .setClaims(claims)
                 .signWith(algorithm, secretKey);
         String jwt = builder.compact();
         return jwt;
+    }
+
+    /**
+     * 解析jwt
+     */
+    public static Claims parseJwt(String jwt) {
+        return parseJwt(jwt, DEFAULT_SECRET_KEY);
+    }
+
+    public static Claims parseJwt(String jwt, String secretKey) {
+        Jws<Claims> jws = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(jwt);
+        return jws.getBody();
     }
 
     /**
@@ -41,22 +58,16 @@ public class JwtUtils {
         return verify(jwt, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
     }
 
+    public boolean verify(String jwt, SignAlg signAlg) {
+        return verify(jwt, signAlg, DEFAULT_SECRET_KEY);
+    }
+
     public boolean verify(String jwt, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
         if (secretKey == null) {
             secretKey = DEFAULT_SECRET_KEY;
         }
         return true;
-    }
-
-    /**
-     * 解析jwt
-     */
-    public static Claims parseJwt(String jwt) {
-        Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(DEFAULT_SECRET_KEY)
-                .parseClaimsJws(jwt);
-        return jws.getBody();
     }
 
     private static SignatureAlgorithm transform(SignAlg signAlg) {
@@ -76,4 +87,5 @@ public class JwtUtils {
         }
         return algorithm;
     }
+
 }

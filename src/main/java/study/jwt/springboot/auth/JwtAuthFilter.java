@@ -31,7 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
         try {
             if (CollectionUtils.contains(authIgnoreLt.iterator(), uri)) {
-                log.info(">>>>>> ignore auth. [{}]");
+                log.warn(">>>>>> ignore auth[{}]", uri);
                 doFilter(request, response, filterChain);
                 return;
             }
