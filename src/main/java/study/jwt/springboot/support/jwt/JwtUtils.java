@@ -5,9 +5,12 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
+import study.jwt.springboot.support.utils.JsonUtils;
 
 import java.util.Map;
 
+@Slf4j
 public class JwtUtils {
 
     private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HS256;
@@ -48,6 +51,9 @@ public class JwtUtils {
         Jws<Claims> jws = Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(jwt);
+        log.info(">>>>>> {}", JsonUtils.toJson(jws.getHeader()));
+        log.info(">>>>>> {}", jws.getSignature());
+        log.info(">>>>>> {}", jws.getBody());
         return jws.getBody();
     }
 
@@ -83,7 +89,7 @@ public class JwtUtils {
                 algorithm = SignatureAlgorithm.HS512;
                 break;
             default:
-                throw new RuntimeException("不支持的算法");
+                throw new RuntimeException("unsupported algorithm");
         }
         return algorithm;
     }

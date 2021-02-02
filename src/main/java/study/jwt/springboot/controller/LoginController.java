@@ -25,7 +25,6 @@ public class LoginController {
         String jwt = loginService.login();
         Map<String, Object> data = Maps.newHashMap();
         data.put("jwt", jwt);
-        log.info(">>>>>> {}", jwt);
         return Results.ok(data);
     }
 
