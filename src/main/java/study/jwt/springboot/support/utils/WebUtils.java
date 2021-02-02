@@ -3,6 +3,7 @@ package study.jwt.springboot.support.utils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -12,7 +13,6 @@ import java.util.Map;
 public class WebUtils {
 
     /**
-     * <p>
      */
     public static String getBodyText(HttpServletRequest request) {
         return null;
@@ -26,7 +26,7 @@ public class WebUtils {
         return request;
     }
 
-    public static HttpServletResponse toHttp(HttpServletResponse servletResponse) {
+    public static HttpServletResponse toHttp(ServletResponse servletResponse) {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         return response;
     }
