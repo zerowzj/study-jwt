@@ -2,6 +2,6 @@ package study.jwt.springboot.support;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = "study.springboot.security.jwt")
+@SpringBootApplication(scanBasePackages = "study.jwt.springboot")
 public class SpringBootCfg {
 }

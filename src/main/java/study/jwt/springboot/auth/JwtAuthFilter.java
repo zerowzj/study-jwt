@@ -1,10 +1,8 @@
 package study.jwt.springboot.auth;
 
-import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import study.jwt.springboot.support.jwt.JwtUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,7 +14,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private static final String X_JWT = "";
+    private static final String X_JWT = "X-Jwt";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -29,7 +27,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 //                throw new RuntimeException("签名错误");
 //            }
             //Step-2: 获取 jwt
-            Claims claims = JwtUtils.parseJwt(jwt);
+//            Claims claims = JwtUtils.parseJwt(jwt);
+            doFilter(request, response, filterChain);
         } catch (Exception ex) {
             throw ex;
         }
