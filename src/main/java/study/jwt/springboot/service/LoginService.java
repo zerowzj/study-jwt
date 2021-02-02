@@ -16,11 +16,7 @@ public class LoginService {
         String token = TokenGenerator.createToken();
 
         Map<String, Object> claims = Maps.newHashMap();
-        claims.put("email1", "wangzhenjun3@xdf.cn");
-        claims.put("email2", "wangzhenjun3@xdf.cn");
-        claims.put("email3", "wangzhenjun3@xdf.cn");
-        claims.put("email4", "wangzhenjun3@xdf.cn");
-        claims.put("email5", "wangzhenjun3@xdf.cn");
+        claims.put("email", "wangzhenjun3@xdf.cn");
         claims.put("token", token);
 
         String jwt = JwtUtils.createJwt(claims);

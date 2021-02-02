@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import study.jwt.springboot.support.utils.JsonUtils;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.Map;
 
 @Slf4j
@@ -30,9 +31,6 @@ public class JwtUtils {
 
     public static String createJwt(Map<String, Object> claims, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
-        if (secretKey == null) {
-            secretKey = DEFAULT_SECRET_KEY;
-        }
         JwtBuilder builder = Jwts.builder()
                 .setClaims(claims)
                 .signWith(algorithm, secretKey);
@@ -60,19 +58,20 @@ public class JwtUtils {
     /**
      * 验证jwt
      */
-    public boolean verify(String jwt) {
-        return verify(jwt, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
+    public static boolean verifyJwt(String jwt) {
+        return verifyJwt(jwt, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
     }
 
-    public boolean verify(String jwt, SignAlg signAlg) {
-        return verify(jwt, signAlg, DEFAULT_SECRET_KEY);
+    public static boolean verifyJwt(String jwt, SignAlg signAlg) {
+        return verifyJwt(jwt, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public boolean verify(String jwt, SignAlg signAlg, String secretKey) {
+    public static boolean verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
         if (secretKey == null) {
             secretKey = DEFAULT_SECRET_KEY;
         }
+
         return true;
     }
 

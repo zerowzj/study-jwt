@@ -31,16 +31,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String uri = request.getRequestURI();
         try {
             if (CollectionUtils.contains(authIgnoreLt.iterator(), uri)) {
-                log.warn(">>>>>> ignore auth[{}]", uri);
+                log.warn(">>> ignore auth! [{}]", uri);
                 doFilter(request, response, filterChain);
                 return;
             }
             //Step-1: 验证 jwt 合法性
             String jwt = request.getHeader(X_JWT);
-//            boolean isLegal = JwtUtils.verifyJwt(jwt);
-//            if (!isLegal) {
-//                throw new RuntimeException("签名错误");
-//            }
+            boolean isLegal = JwtUtils.verifyJwt(jwt);
+            if (!isLegal) {
+                throw new RuntimeException("签名错误");
+            }
             //Step-2: 获取 jwt
             Claims claims = JwtUtils.parseJwt(jwt);
             log.info("{}", JsonUtils.toJson(claims));

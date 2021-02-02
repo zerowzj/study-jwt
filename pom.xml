@@ -24,16 +24,16 @@
         </dependency>
 
         <!-- ============================== -->
-        <!--（★）JWT                       -->
+        <!--（★）JWT                        -->
         <!-- ============================== -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
-        <!-- ==================== -->
-        <!--  UUID                -->
-        <!-- ==================== -->
+        <!-- ============================== -->
+        <!--（★）UUID                       -->
+        <!-- ============================== -->
         <dependency>
             <groupId>com.fasterxml.uuid</groupId>
             <artifactId>java-uuid-generator</artifactId>

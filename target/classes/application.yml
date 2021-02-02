@@ -1,0 +1,16 @@
+#
+server:
+  port: 7000
+#
+logging:
+  config: classpath:logback.xml
+#
+spring:
+  application:
+    name: study-jwt
+  main:
+    web-application-type: servlet
+    banner-mode: off
+#
+auth:
+  ignoreList: /login
