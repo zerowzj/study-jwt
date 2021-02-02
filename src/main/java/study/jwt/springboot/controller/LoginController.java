@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.jwt.springboot.service.LoginService;
@@ -26,5 +27,10 @@ public class LoginController {
         data.put("jwt", jwt);
         log.info(">>>>>> {}", jwt);
         return Results.ok(data);
+    }
+
+    @RequestMapping("/logout")
+    public Result logout(@RequestHeader("X-Token") String token){
+        return Results.ok();
     }
 }

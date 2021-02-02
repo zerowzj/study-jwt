@@ -27,6 +27,7 @@ public class JwtUtils {
             secretKey = DEFAULT_SECRET_KEY;
         }
         JwtBuilder builder = Jwts.builder()
+                .setSubject("qweqwe")
                 .setClaims(claims)
                 .signWith(algorithm, secretKey);
         String jwt = builder.compact();
@@ -53,6 +54,7 @@ public class JwtUtils {
      */
     public static Claims parseJwt(String jwt) {
         Jws<Claims> jws = Jwts.parser()
+                .setSigningKey(DEFAULT_SECRET_KEY)
                 .parseClaimsJws(jwt);
         return jws.getBody();
     }

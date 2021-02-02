@@ -11,3 +11,6 @@ spring:
   main:
     web-application-type: servlet
     banner-mode: off
+#
+auth:
+  ignoreList: /login
