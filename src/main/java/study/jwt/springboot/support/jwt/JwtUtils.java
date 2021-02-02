@@ -18,7 +18,7 @@ public class JwtUtils {
      * 生成jwt
      */
     public static String createJwt(Map<String, Object> claims) {
-        return createJwt(claims, null, null);
+        return createJwt(claims, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
     }
 
     public static String createJwt(Map<String, Object> claims, SignAlg signAlg, String secretKey) {
@@ -36,6 +36,10 @@ public class JwtUtils {
     /**
      * 验证jwt
      */
+    public boolean verify(String jwt) {
+        return verify(jwt, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
+    }
+
     public boolean verify(String jwt, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
         if (secretKey == null) {
