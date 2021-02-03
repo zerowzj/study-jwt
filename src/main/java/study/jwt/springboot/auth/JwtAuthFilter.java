@@ -37,10 +37,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             //Step-1: 验证jwt合法性
             String jwt = request.getHeader(X_JWT);
-//            boolean isLegal = JwtUtils.verifyJwt(jwt);
-//            if (!isLegal) {
-//                throw new RuntimeException("签名错误");
-//            }
+            boolean isLegal = JwtUtils.verifyJwt(jwt);
+            if (!isLegal) {
+                throw new RuntimeException("签名错误");
+            }
             //Step-2: 获取jwt
             Map claims = JwtUtils.parseJwt(jwt);
             log.info("{}", claims);

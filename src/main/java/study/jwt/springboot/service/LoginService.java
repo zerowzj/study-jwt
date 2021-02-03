@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import study.jwt.springboot.support.jwt.JwtUtils;
-import study.jwt.springboot.support.jwt.Payload;
 import study.jwt.springboot.support.jwt.TokenGenerator;
 
 import java.util.Map;
@@ -21,11 +20,7 @@ public class LoginService {
         claims.put("email", "wangzhenjun3@xdf.cn");
         claims.put("token", token);
 
-        Payload payload = new Payload();
-        payload.setId("12312");
-        payload.setSubject("aaaaaaa");
-        payload.setClaims(claims);
-        String jwt = JwtUtils.createJwt(payload);
+        String jwt = JwtUtils.createJwt(claims);
         return jwt;
     }
 }

@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Date;
 import java.util.Map;
 
 @Slf4j
@@ -23,23 +24,21 @@ public final class JwtUtils {
     /**
      * 生成Jwt
      */
-    public static String createJwt(Payload payload) {
-        return createJwt(payload, DEFAULT_ALGORITHM);
+    public static String createJwt(Map<String, String> claims) {
+        return createJwt(claims, DEFAULT_ALGORITHM);
     }
 
-    public static String createJwt(Payload payload, SignAlg signAlg) {
-        return createJwt(payload, signAlg, DEFAULT_SECRET_KEY);
+    public static String createJwt(Map<String, String> claims, SignAlg signAlg) {
+        return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
+    public static String createJwt(Map<String, String> claims, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
         //生成器
         JWTCreator.Builder builder = JWT.create()
-                .withJWTId(payload.getId())
-                .withSubject(payload.getSubject())
-                .withExpiresAt(payload.getExpiresAt())
-                .withNotBefore(payload.getNotBefore());
-        Map<String, String> claims = payload.getClaims();
+                .withSubject("subject")
+                .withIssuedAt(new Date())
+                .withExpiresAt(new Date(System.currentTimeMillis() + 5000));
         if (claims != null) {
             claims.forEach((k, v) -> {
                 builder.withClaim(k, v);
@@ -69,6 +68,7 @@ public final class JwtUtils {
         try {
             verifier.verify(jwt);
         } catch (Exception ex) {
+            ex.printStackTrace();
             isLegal = false;
         }
         return isLegal;
@@ -81,11 +81,12 @@ public final class JwtUtils {
         //解码器
         DecodedJWT decodedJWT = JWT.decode(jwt);
         Map<String, String> claims = Maps.newHashMap();
-        log.info("111111111111 {}", decodedJWT.getPayload());
-        decodedJWT.getHeader();
+        log.info("payload= {}", decodedJWT.getPayload());
+        log.info(" header= {}", decodedJWT.getHeader());
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
         });
+        log.info(" claims= {}", claims);
         return claims;
     }
 
