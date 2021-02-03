@@ -31,7 +31,7 @@ public class JwtUtils {
     public static String createJwt(Map<String, Object> claims, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
         JwtBuilder builder = Jwts.builder()
-                .setPayload("asdfasdf")
+//                .setPayload("asdfasdf")
                 .setClaims(claims)
                 .signWith(algorithm, secretKey);
         String jwt = builder.compact();
