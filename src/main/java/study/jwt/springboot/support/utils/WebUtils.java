@@ -1,6 +1,7 @@
 package study.jwt.springboot.support.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import study.jwt.springboot.support.result.Result;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -56,7 +57,7 @@ public class WebUtils {
     /**
      * 输出信息
      */
-    public static void write(HttpServletResponse response, Map<String, Object> result) {
+    public static void write(HttpServletResponse response, Result result) {
         PrintWriter writer = null;
         try {
             response.setContentType("application/json; charset=UTF-8");

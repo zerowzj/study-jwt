@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -51,27 +52,30 @@ public final class JwtUtils {
     /**
      * 验证Jwt
      */
-    public static boolean verifyJwt(String jwt) {
+    public static VerifyRst verifyJwt(String jwt) {
         return verifyJwt(jwt, DEFAULT_ALGORITHM);
     }
 
-    public static boolean verifyJwt(String jwt, SignAlg signAlg) {
+    public static VerifyRst verifyJwt(String jwt, SignAlg signAlg) {
         return verifyJwt(jwt, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static boolean verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
+    public static VerifyRst verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
         //验证器
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();
-        boolean isLegal = true;
+        VerifyRst code = VerifyRst.OK;
         try {
             verifier.verify(jwt);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            isLegal = false;
+            if (ex instanceof TokenExpiredException) {
+                code = VerifyRst.TOKEN_EXPIRED;
+            } else {
+                code = VerifyRst.SIGN_ERROR;
+            }
         }
-        return isLegal;
+        return code;
     }
 
     /**
@@ -81,8 +85,9 @@ public final class JwtUtils {
         //解码器
         DecodedJWT decodedJWT = JWT.decode(jwt);
         Map<String, String> claims = Maps.newHashMap();
-        log.info("payload= {}", decodedJWT.getPayload());
         log.info(" header= {}", decodedJWT.getHeader());
+        log.info("payload= {}", decodedJWT.getPayload());
+        log.info("   sign= {}", decodedJWT.getSignature());
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
         });
@@ -109,5 +114,9 @@ public final class JwtUtils {
                 throw new IllegalArgumentException("不支持的算法");
         }
         return algorithm;
+    }
+
+    public enum VerifyRst {
+        OK, TOKEN_EXPIRED, SIGN_ERROR;
     }
 }

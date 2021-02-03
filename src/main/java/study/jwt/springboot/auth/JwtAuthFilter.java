@@ -6,7 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.jwt.springboot.support.jwt.JwtUtils;
-import study.jwt.springboot.support.utils.JsonUtils;
+import study.jwt.springboot.support.result.Results;
+import study.jwt.springboot.support.utils.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -29,21 +30,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String uri = request.getRequestURI();
+        if (CollectionUtils.contains(authIgnoreLt.iterator(), uri)) {
+            log.info(">>>>>> ignore auth! [{}]", uri);
+            doFilter(request, response, filterChain);
+            return;
+        }
         try {
-            if (CollectionUtils.contains(authIgnoreLt.iterator(), uri)) {
-                log.info(">>>>>> ignore auth! [{}]", uri);
-                doFilter(request, response, filterChain);
-                return;
-            }
             //Step-1: 验证jwt合法性
             String jwt = request.getHeader(X_JWT);
-            boolean isLegal = JwtUtils.verifyJwt(jwt);
-            if (!isLegal) {
-                throw new RuntimeException("签名错误");
+            JwtUtils.VerifyRst rst = JwtUtils.verifyJwt(jwt);
+            switch (rst) {
+                case SIGN_ERROR:
+                    log.info("11111111");
+                    WebUtils.write(response, Results.fail("9001", "签名错误"));
+                    return;
+                case TOKEN_EXPIRED:
+                    log.info("222222222");
+                    WebUtils.write(response, Results.fail("9002", "token过期"));
+                    return;
             }
             //Step-2: 获取jwt
             Map claims = JwtUtils.parseJwt(jwt);
-            log.info("{}", claims);
 
             doFilter(request, response, filterChain);
         } catch (Exception ex) {

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import study.jwt.springboot.support.utils.JsonUtils;
 
 import javax.crypto.SecretKey;
+import java.util.Map;
 
 @Slf4j
 public class JwtV2Utils {
@@ -22,23 +23,22 @@ public class JwtV2Utils {
     /**
      * 生成jwt
      */
-    public static String createJwt(Payload payload) {
-        return createJwt(payload, DEFAULT_ALGORITHM);
+    public static String createJwt(Map<String, String> claims) {
+        return createJwt(claims, DEFAULT_ALGORITHM);
     }
 
-    public static String createJwt(Payload payload, SignAlg signAlg) {
-        return createJwt(payload, signAlg, DEFAULT_SECRET_KEY);
+    public static String createJwt(Map<String, String> claims, SignAlg signAlg) {
+        return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
+    public static String createJwt(Map<String, String> claims, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
-        SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
+//        SecretKey key = Keys.hmacShaKeyFor();
         JwtBuilder builder = Jwts.builder()
-                .setClaims(payload.getClaims())
-                .setId(payload.getId())
-                .setSubject(payload.getSubject())
-                .setIssuer(payload.getIssuer())
-                .signWith(key, algorithm);
+                .setClaims(claims)
+                .setSubject("subject")
+//                .signWith()
+                .signWith(algorithm, secretKey.getBytes());
         String jwt = builder.compact();
         return jwt;
     }
@@ -52,12 +52,10 @@ public class JwtV2Utils {
 
     public static Claims parseJwt(String jwt, String secretKey) {
         JwtParser parser = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
                 .build();
         Jws<Claims> jws = parser.parseClaimsJws(jwt);
-        log.info(">>>>>> {}", JsonUtils.toJson(jws.getHeader()));
-        log.info(">>>>>> {}", jws.getSignature());
-        log.info(">>>>>> {}", jws.getBody());
+        log.info("header= {}", jws.getHeader());
+        log.info("body= {}", jws.getBody());
         return jws.getBody();
     }
 
