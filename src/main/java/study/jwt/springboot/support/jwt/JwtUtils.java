@@ -39,7 +39,7 @@ public final class JwtUtils {
         JWTCreator.Builder builder = JWT.create()
                 .withSubject("subject")
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 5000));
+                .withExpiresAt(new Date(System.currentTimeMillis() + 50000));
         if (claims != null) {
             claims.forEach((k, v) -> {
                 builder.withClaim(k, v);

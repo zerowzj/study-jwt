@@ -16,7 +16,6 @@ public class LoginService {
         String token = TokenGenerator.createToken();
 
         Map<String, String> claims = Maps.newHashMap();
-        claims.put("userId", "900001");
         claims.put("email", "wangzhenjun3@xdf.cn");
         claims.put("token", token);
 
