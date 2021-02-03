@@ -23,17 +23,23 @@ public final class JwtUtils {
     /**
      * 生成Jwt
      */
-    public static String createJwt(Map<String, String> claims) {
-        return createJwt(claims, DEFAULT_ALGORITHM);
+    public static String createJwt(Payload payload) {
+        return createJwt(payload, DEFAULT_ALGORITHM);
     }
 
-    public static String createJwt(Map<String, String> claims, SignAlg signAlg) {
-        return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
+    public static String createJwt(Payload payload, SignAlg signAlg) {
+        return createJwt(payload, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static String createJwt(Map<String, String> claims, SignAlg signAlg, String secretKey) {
+    public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
-        JWTCreator.Builder builder = JWT.create();
+        //生成器
+        JWTCreator.Builder builder = JWT.create()
+                .withJWTId(payload.getId())
+                .withSubject(payload.getSubject())
+                .withExpiresAt(payload.getExpiresAt())
+                .withNotBefore(payload.getNotBefore());
+        Map<String, String> claims = payload.getClaims();
         if (claims != null) {
             claims.forEach((k, v) -> {
                 builder.withClaim(k, v);
@@ -56,6 +62,7 @@ public final class JwtUtils {
 
     public static boolean verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
+        //验证器
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();
         boolean isLegal = true;
@@ -71,8 +78,11 @@ public final class JwtUtils {
      * 解析Jwt
      */
     public static Map<String, String> parseJwt(String jwt) {
+        //解码器
         DecodedJWT decodedJWT = JWT.decode(jwt);
         Map<String, String> claims = Maps.newHashMap();
+        log.info("111111111111 {}", decodedJWT.getPayload());
+        decodedJWT.getHeader();
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
         });

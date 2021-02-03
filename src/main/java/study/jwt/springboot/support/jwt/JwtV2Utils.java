@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import study.jwt.springboot.support.utils.JsonUtils;
 
 import javax.crypto.SecretKey;
-import java.util.Map;
 
 @Slf4j
 public class JwtV2Utils {
@@ -23,19 +22,22 @@ public class JwtV2Utils {
     /**
      * 生成jwt
      */
-    public static String createJwt(Map<String, Object> claims) {
-        return createJwt(claims, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
+    public static String createJwt(Payload payload) {
+        return createJwt(payload, DEFAULT_ALGORITHM);
     }
 
-    public static String createJwt(Map<String, Object> claims, SignAlg signAlg) {
-        return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
+    public static String createJwt(Payload payload, SignAlg signAlg) {
+        return createJwt(payload, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static String createJwt(Map<String, Object> claims, SignAlg signAlg, String secretKey) {
+    public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes());
         JwtBuilder builder = Jwts.builder()
-                .setClaims(claims)
+                .setClaims(payload.getClaims())
+                .setId(payload.getId())
+                .setSubject(payload.getSubject())
+                .setIssuer(payload.getIssuer())
                 .signWith(key, algorithm);
         String jwt = builder.compact();
         return jwt;
