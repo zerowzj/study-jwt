@@ -8,7 +8,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import study.jwt.springboot.support.utils.JsonUtils;
 
-import javax.validation.constraints.AssertTrue;
 import java.util.Map;
 
 @Slf4j
@@ -32,6 +31,7 @@ public class JwtUtils {
     public static String createJwt(Map<String, Object> claims, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
         JwtBuilder builder = Jwts.builder()
+                .setPayload("asdfasdf")
                 .setClaims(claims)
                 .signWith(algorithm, secretKey);
         String jwt = builder.compact();
