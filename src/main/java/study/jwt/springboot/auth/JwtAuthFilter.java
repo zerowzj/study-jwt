@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -42,7 +43,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 throw new RuntimeException("签名错误");
             }
             //Step-2: 获取 jwt
-            Claims claims = JwtUtils.parseJwt(jwt);
+            Map claims = JwtUtils.parseJwt(jwt);
             log.info("{}", JsonUtils.toJson(claims));
             doFilter(request, response, filterChain);
         } catch (Exception ex) {
