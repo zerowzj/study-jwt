@@ -6,16 +6,15 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
+import java.security.Key;
 
 @Slf4j
 public class JwtUtil {
 
     private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HS256;
-
-    private final static String DEFAULT_SECRET_KEY = "abc!@#XYZ123";
 
     /**
      * 生成jwt
@@ -25,19 +24,14 @@ public class JwtUtil {
     }
 
     public static String createJwt(Payload payload, SignAlg signAlg) {
-        return createJwt(payload, signAlg, DEFAULT_SECRET_KEY);
-    }
-
-    public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
-//        SecretKey key = Keys.hmacShaKeyFor();
+        Key key = Keys.secretKeyFor(algorithm);
         JwtBuilder builder = Jwts.builder()
                 .setId(payload.getId())
                 .setSubject(payload.getSubject())
                 .setIssuer(payload.getIssuer())
                 .setIssuedAt(payload.getIssuedAt())
-//                .signWith()
-                .signWith(algorithm, secretKey.getBytes());
+                .signWith(key);
         String jwt = builder.compact();
         return jwt;
     }
@@ -46,38 +40,23 @@ public class JwtUtil {
      * 解析jwt
      */
     public static Claims parseJwt(String jwt) {
-        return parseJwt(jwt, DEFAULT_SECRET_KEY);
+        return parseJwt(jwt, DEFAULT_ALGORITHM);
     }
 
-    public static Claims parseJwt(String jwt, String secretKey) {
+    public static Claims parseJwt(String jwt, SignAlg signAlg) {
+        SignatureAlgorithm algorithm = transform(signAlg);
+        Key key = Keys.secretKeyFor(algorithm);
         JwtParser parser = Jwts.parserBuilder()
+                .setSigningKey(key)
                 .build();
         Jws<Claims> jws = parser.parseClaimsJws(jwt);
         log.info("header= {}", jws.getHeader());
         log.info("body= {}", jws.getBody());
+
         return jws.getBody();
     }
 
-    /**
-     * 验证jwt
-     */
-    public static boolean verifyJwt(String jwt) {
-        return verifyJwt(jwt, DEFAULT_ALGORITHM, DEFAULT_SECRET_KEY);
-    }
-
-    public static boolean verifyJwt(String jwt, SignAlg signAlg) {
-        return verifyJwt(jwt, signAlg, DEFAULT_SECRET_KEY);
-    }
-
-    public static boolean verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
-        SignatureAlgorithm algorithm = transform(signAlg);
-        return true;
-    }
-
     private static SignatureAlgorithm transform(SignAlg signAlg) {
-        if (signAlg == null) {
-            signAlg = DEFAULT_ALGORITHM;
-        }
         SignatureAlgorithm algorithm;
         switch (signAlg) {
             case HS256:
@@ -91,5 +70,4 @@ public class JwtUtil {
         }
         return algorithm;
     }
-
 }
