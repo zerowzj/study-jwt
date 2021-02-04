@@ -30,6 +30,9 @@ public class Results {
         Result result = new Result();
         result.setCode(code);
         result.setDesc(desc);
+        if(data == null){
+            data = EMPTY_DATA;
+        }
         result.setData(data);
         return result;
     }
