@@ -47,7 +47,6 @@ public class Payload {
         return (String) data.get(SUBJECT);
     }
 
-
     public Payload setIssuer(String iss) {
         data.put(ISSUER, iss);
         return this;

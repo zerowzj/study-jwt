@@ -20,20 +20,22 @@ public class JwtUtil {
     /**
      * 生成jwt
      */
-    public static String createJwt(Map<String, String> claims) {
-        return createJwt(claims, DEFAULT_ALGORITHM);
+    public static String createJwt(Payload payload) {
+        return createJwt(payload, DEFAULT_ALGORITHM);
     }
 
-    public static String createJwt(Map<String, String> claims, SignAlg signAlg) {
-        return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
+    public static String createJwt(Payload payload, SignAlg signAlg) {
+        return createJwt(payload, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static String createJwt(Map<String, String> claims, SignAlg signAlg, String secretKey) {
+    public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
         SignatureAlgorithm algorithm = transform(signAlg);
 //        SecretKey key = Keys.hmacShaKeyFor();
         JwtBuilder builder = Jwts.builder()
-                .setClaims(claims)
-                .setSubject("subject")
+                .setId(payload.getId())
+                .setSubject(payload.getSubject())
+                .setIssuer(payload.getIssuer())
+                .setIssuedAt(payload.getIssuedAt())
 //                .signWith()
                 .signWith(algorithm, secretKey.getBytes());
         String jwt = builder.compact();
