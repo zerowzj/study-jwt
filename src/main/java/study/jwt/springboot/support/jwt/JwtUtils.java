@@ -25,24 +25,26 @@ public final class JwtUtils {
     /**
      * 生成Jwt
      */
-    public static String createJwt(Map<String, String> claims) {
+    public static String createJwt(Claims claims) {
         return createJwt(claims, DEFAULT_ALGORITHM);
     }
 
-    public static String createJwt(Map<String, String> claims, SignAlg signAlg) {
+    public static String createJwt(Claims claims, SignAlg signAlg) {
         return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static String createJwt(Map<String, String> claims, SignAlg signAlg, String secretKey) {
+    public static String createJwt(Claims claims, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
         //生成器
         JWTCreator.Builder builder = JWT.create()
-                .withSubject("subject")
-                .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 50000));
+                .withJWTId(claims.getId())
+//                .withSubject(claims.getSubject())
+//                .withIssuer(claims.getIssuer())
+//                .withIssuedAt(claims.getIssuedAt())
+                ;
         if (claims != null) {
             claims.forEach((k, v) -> {
-                builder.withClaim(k, v);
+                builder.withClaim(k, String.valueOf(v));
             });
         }
         String jwt = builder.sign(algorithm);
@@ -69,6 +71,7 @@ public final class JwtUtils {
         try {
             verifier.verify(jwt);
         } catch (Exception ex) {
+            ex.printStackTrace();
             if (ex instanceof TokenExpiredException) {
                 code = VerifyRst.TOKEN_EXPIRED;
             } else {
@@ -84,10 +87,11 @@ public final class JwtUtils {
     public static Map<String, String> parseJwt(String jwt) {
         //解码器
         DecodedJWT decodedJWT = JWT.decode(jwt);
-        Map<String, String> claims = Maps.newHashMap();
         log.info(" header= {}", decodedJWT.getHeader());
         log.info("payload= {}", decodedJWT.getPayload());
         log.info("   sign= {}", decodedJWT.getSignature());
+
+        Map<String, String> claims = Maps.newHashMap();
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
         });

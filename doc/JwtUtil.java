@@ -6,15 +6,12 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import study.jwt.springboot.support.utils.JsonUtils;
 
-import javax.crypto.SecretKey;
 import java.util.Map;
 
 @Slf4j
-public class JwtV2Utils {
+public class JwtUtil {
 
     private final static SignAlg DEFAULT_ALGORITHM = SignAlg.HS256;
 
