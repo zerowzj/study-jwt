@@ -1,4 +1,4 @@
-package study.jwt.springboot.support.jwt;
+package study.jwt.springboot.support.utils;
 
 import com.fasterxml.uuid.EthernetAddress;
 import com.fasterxml.uuid.Generators;

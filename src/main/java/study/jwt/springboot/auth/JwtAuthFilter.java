@@ -41,12 +41,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             JwtUtils.VerifyRst rst = JwtUtils.verifyJwt(jwt);
             switch (rst) {
                 case SIGN_ERROR:
-                    log.info("11111111");
                     WebUtils.write(response, Results.fail("9001", "签名错误"));
                     return;
                 case TOKEN_EXPIRED:
-                    log.info("222222222");
                     WebUtils.write(response, Results.fail("9002", "token过期"));
+                    return;
+                case FAIL:
+                    WebUtils.write(response, Results.fail("9003", "token错误"));
                     return;
             }
             //Step-2: 获取jwt

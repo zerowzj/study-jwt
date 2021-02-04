@@ -4,12 +4,13 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import study.jwt.springboot.support.utils.JsonUtils;
 
-import java.util.Date;
 import java.util.Map;
 
 @Slf4j
@@ -25,25 +26,28 @@ public final class JwtUtils {
     /**
      * 生成Jwt
      */
-    public static String createJwt(Claims claims) {
-        return createJwt(claims, DEFAULT_ALGORITHM);
+    public static String createJwt(Payload payload) {
+        return createJwt(payload, DEFAULT_ALGORITHM);
     }
 
-    public static String createJwt(Claims claims, SignAlg signAlg) {
-        return createJwt(claims, signAlg, DEFAULT_SECRET_KEY);
+    public static String createJwt(Payload payload, SignAlg signAlg) {
+        return createJwt(payload, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static String createJwt(Claims claims, SignAlg signAlg, String secretKey) {
+    public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
+        log.info("{}", JsonUtils.toJson(payload));
         Algorithm algorithm = transform(signAlg, secretKey);
         //生成器
         JWTCreator.Builder builder = JWT.create()
-                .withJWTId(claims.getId())
-//                .withSubject(claims.getSubject())
-//                .withIssuer(claims.getIssuer())
-//                .withIssuedAt(claims.getIssuedAt())
-                ;
+                .withJWTId(payload.getId())
+                .withSubject(payload.getSubject())
+                .withIssuer(payload.getIssuer())
+                .withIssuedAt(payload.getIssuedAt())
+                .withExpiresAt(payload.getExpiration());
+        Map<String, Object> claims = payload.getClaims();
         if (claims != null) {
             claims.forEach((k, v) -> {
+                log.info("{}={}", k, v);
                 builder.withClaim(k, String.valueOf(v));
             });
         }
@@ -74,8 +78,10 @@ public final class JwtUtils {
             ex.printStackTrace();
             if (ex instanceof TokenExpiredException) {
                 code = VerifyRst.TOKEN_EXPIRED;
-            } else {
+            } else if (ex instanceof SignatureVerificationException) {
                 code = VerifyRst.SIGN_ERROR;
+            } else {
+
             }
         }
         return code;
@@ -121,6 +127,6 @@ public final class JwtUtils {
     }
 
     public enum VerifyRst {
-        OK, TOKEN_EXPIRED, SIGN_ERROR;
+        OK, TOKEN_EXPIRED, SIGN_ERROR, FAIL;
     }
 }
