@@ -44,11 +44,11 @@ public final class JwtUtils {
                 .withIssuer(payload.getIssuer())
                 .withIssuedAt(payload.getIssuedAt())
                 .withExpiresAt(payload.getExpiration());
-        Map<String, Object> claims = payload.getClaims();
+        //
+        Map<String, String> claims = payload.getClaims();
         if (claims != null) {
             claims.forEach((k, v) -> {
-                log.info("{}={}", k, v);
-                builder.withClaim(k, String.valueOf(v));
+                builder.withClaim(k, v);
             });
         }
         String jwt = builder.sign(algorithm);
@@ -71,20 +71,20 @@ public final class JwtUtils {
         //验证器
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();
-        VerifyRst code = VerifyRst.OK;
+        VerifyRst rst = VerifyRst.OK;
         try {
             verifier.verify(jwt);
         } catch (Exception ex) {
             ex.printStackTrace();
             if (ex instanceof TokenExpiredException) {
-                code = VerifyRst.TOKEN_EXPIRED;
+                rst = VerifyRst.TOKEN_EXPIRED;
             } else if (ex instanceof SignatureVerificationException) {
-                code = VerifyRst.SIGN_ERROR;
+                rst = VerifyRst.SIGN_ERROR;
             } else {
-
+                rst = VerifyRst.FAIL;
             }
         }
-        return code;
+        return rst;
     }
 
     /**

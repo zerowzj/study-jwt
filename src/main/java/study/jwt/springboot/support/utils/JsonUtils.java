@@ -13,7 +13,7 @@ public final class JsonUtils {
     }
 
     public static String toJson(Object obj) {
-        return JSON.toJSONString(obj, SerializerFeature.EMPTY);
+        return JSON.toJSONString(obj, SerializerFeature.PrettyFormat);
     }
 
     public static <T> T fromJson(String text, Class<T> clazz) {

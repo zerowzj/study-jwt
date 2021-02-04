@@ -27,7 +27,7 @@ public class Payload {
 
     @Setter
     @Getter
-    private Map<String, Object> claims = new HashMap<>();
+    private Map<String, String> claims = new HashMap<>();
 
     public Payload setId(String jti) {
         data.put(ID, jti);
