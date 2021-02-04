@@ -51,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     return;
             }
             //Step-2: 获取jwt
-            Map claims = JwtUtils.parseJwt(jwt);
+            Map<String, String> claims = JwtUtils.parseJwt(jwt);
 
             doFilter(request, response, filterChain);
         } catch (Exception ex) {

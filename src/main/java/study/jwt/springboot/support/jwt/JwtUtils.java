@@ -93,15 +93,15 @@ public final class JwtUtils {
     public static Map<String, String> parseJwt(String jwt) {
         //解码器
         DecodedJWT decodedJWT = JWT.decode(jwt);
-        log.info(" header= {}", decodedJWT.getHeader());
-        log.info("payload= {}", decodedJWT.getPayload());
-        log.info("   sign= {}", decodedJWT.getSignature());
-
+//        log.info(" header= {}", decodedJWT.getHeader());
+//        log.info("payload= {}", decodedJWT.getPayload());
+//        log.info("   sign= {}", decodedJWT.getSignature());
+        //
         Map<String, String> claims = Maps.newHashMap();
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
         });
-        log.info(" claims= {}", claims);
+        log.info(" claims= {}", JsonUtils.toJson(claims));
         return claims;
     }
 
