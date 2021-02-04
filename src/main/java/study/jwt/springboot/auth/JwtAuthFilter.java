@@ -7,6 +7,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.jwt.springboot.support.jwt.JwtUtils;
 import study.jwt.springboot.support.result.Results;
+import study.jwt.springboot.support.utils.JsonUtils;
 import study.jwt.springboot.support.utils.WebUtils;
 
 import javax.servlet.FilterChain;
@@ -52,6 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             //Step-2: 获取jwt
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
+            log.info("{}", JsonUtils.toJson(claims));
 
             doFilter(request, response, filterChain);
         } catch (Exception ex) {

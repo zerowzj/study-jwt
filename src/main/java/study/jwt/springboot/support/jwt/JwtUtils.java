@@ -101,7 +101,7 @@ public final class JwtUtils {
         decodedJWT.getClaims().forEach((k, v) -> {
             claims.put(k, v.asString());
         });
-        log.info(" claims= {}", JsonUtils.toJson(claims));
+//        log.info(" claims= {}", JsonUtils.toJson(claims));
         return claims;
     }
 
