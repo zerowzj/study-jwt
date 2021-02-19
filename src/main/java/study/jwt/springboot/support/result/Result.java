@@ -13,7 +13,7 @@ public class Result<T> {
 
     private T data;
 
-    private String requestId;
+    private String requestId = "666666";
 
     protected Result() {
     }
