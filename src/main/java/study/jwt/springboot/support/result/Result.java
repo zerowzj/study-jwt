@@ -13,6 +13,8 @@ public class Result<T> {
 
     private T data;
 
+    private String requestId;
+
     protected Result() {
     }
 }

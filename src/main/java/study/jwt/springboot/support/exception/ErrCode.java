@@ -1,11 +1,14 @@
 package study.jwt.springboot.support.exception;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrCode {
 
     SUCCESS("0000", "成功"),
 
     //参数：1xxx
-    PARAM_EMPTY("1000", "参数值为空[%s]"),
+    PARAM_EMPTY("1001", "参数值为空[%s]"),
     PARAM_FORMAT_ERROR("1002", "参数值格式错误[%s]"),
     PARAM_VALUE_ILLEGAL("1003", "参数值非法[%s]"),
     //业务：2xxx
@@ -26,10 +29,10 @@ public enum ErrCode {
 
     private String code;
 
-    private String desc;
+    private String message;
 
-    ErrCode(String code, String desc) {
+    ErrCode(String code, String message) {
         this.code = code;
-        this.desc = desc;
+        this.message = message;
     }
 }

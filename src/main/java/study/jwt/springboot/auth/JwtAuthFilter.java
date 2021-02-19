@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import study.jwt.springboot.support.exception.ErrCode;
+import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.jwt.JwtUtils;
 import study.jwt.springboot.support.result.Results;
 import study.jwt.springboot.support.utils.JsonUtils;
@@ -30,6 +32,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        //ignore auth
         String uri = request.getRequestURI();
         if (CollectionUtils.contains(authIgnoreLt.iterator(), uri)) {
             log.info(">>>>>> ignore auth! [{}]", uri);
@@ -39,18 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             //Step-1: 验证jwt合法性
             String jwt = request.getHeader(X_JWT);
-            JwtUtils.VerifyRst rst = JwtUtils.verifyJwt(jwt);
-            switch (rst) {
-                case SIGN_ERROR:
-                    WebUtils.write(response, Results.fail("9001", "签名错误"));
-                    return;
-                case TOKEN_EXPIRED:
-                    WebUtils.write(response, Results.fail("9002", "token过期"));
-                    return;
-                case FAIL:
-                    WebUtils.write(response, Results.fail("9003", "token错误"));
-                    return;
-            }
+            JwtUtils.verifyJwt(jwt);
             //Step-2: 获取jwt
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
             log.info("{}", JsonUtils.toJson(claims));
@@ -59,7 +51,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             doFilter(request, response, filterChain);
         } catch (Exception ex) {
-            throw ex;
+            if (ex instanceof VException) {
+                VException vex = (VException) ex;
+                //错误码
+                ErrCode errCode = vex.getErrCode();
+                WebUtils.write(response, Results.fail(errCode));
+            } else {
+                throw ex;
+            }
         }
     }
 }

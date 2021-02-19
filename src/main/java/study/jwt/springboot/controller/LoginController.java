@@ -1,14 +1,14 @@
 package study.jwt.springboot.controller;
 
 import com.google.common.collect.Maps;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.jwt.springboot.service.LoginService;
-import study.jwt.springboot.support.exception.Asserts;
+import study.jwt.springboot.support.exception.ErrCode;
+import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.result.Result;
 import study.jwt.springboot.support.result.Results;
 
@@ -23,6 +23,9 @@ public class LoginController {
 
     @RequestMapping("/login")
     public Result login() {
+        if (1 == 1) {
+            throw new VException(ErrCode.AUTH_TOKEN_ERROR);
+        }
         String jwt = loginService.login();
         Map<String, Object> data = Maps.newHashMap();
         data.put("jwt", jwt);

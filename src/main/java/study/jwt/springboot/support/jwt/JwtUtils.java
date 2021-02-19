@@ -9,6 +9,8 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import study.jwt.springboot.support.exception.ErrCode;
+import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.utils.JsonUtils;
 
 import java.util.Map;
@@ -58,33 +60,31 @@ public final class JwtUtils {
     /**
      * 验证Jwt
      */
-    public static VerifyRst verifyJwt(String jwt) {
-        return verifyJwt(jwt, DEFAULT_ALGORITHM);
+    public static void verifyJwt(String jwt) {
+        verifyJwt(jwt, DEFAULT_ALGORITHM);
     }
 
-    public static VerifyRst verifyJwt(String jwt, SignAlg signAlg) {
-        return verifyJwt(jwt, signAlg, DEFAULT_SECRET_KEY);
+    public static void verifyJwt(String jwt, SignAlg signAlg) {
+        verifyJwt(jwt, signAlg, DEFAULT_SECRET_KEY);
     }
 
-    public static VerifyRst verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
+    public static void verifyJwt(String jwt, SignAlg signAlg, String secretKey) {
         Algorithm algorithm = transform(signAlg, secretKey);
         //验证器
         JWTVerifier verifier = JWT.require(algorithm)
                 .build();
-        VerifyRst rst = VerifyRst.OK;
         try {
             verifier.verify(jwt);
         } catch (Exception ex) {
             ex.printStackTrace();
             if (ex instanceof TokenExpiredException) {
-                rst = VerifyRst.TOKEN_EXPIRED;
+                throw new VException(ErrCode.AUTH_RE_LOGIN);
             } else if (ex instanceof SignatureVerificationException) {
-                rst = VerifyRst.SIGN_ERROR;
+                throw new VException(ErrCode.AUTH_TOKEN_ERROR);
             } else {
-                rst = VerifyRst.FAIL;
+                throw new VException(ErrCode.AUTH_TOKEN_EXPIRED_ERROR);
             }
         }
-        return rst;
     }
 
     /**
