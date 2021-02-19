@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Payload {
+
+    private Map<String, Object> _data = new HashMap<>();
+
     /* 编号 */
     public static final String ID = "jti";
     /* 主题 */
@@ -23,63 +26,61 @@ public class Payload {
     /*  */
     public static final String AUDIENCE = "aud";
 
-    private Map<String, Object> data = new HashMap<>();
-
     @Setter
     @Getter
     private Map<String, String> claims = new HashMap<>();
 
     public Payload setId(String jti) {
-        data.put(ID, jti);
+        _data.put(ID, jti);
         return this;
     }
 
     public String getId() {
-        return (String) data.get(ID);
+        return (String) _data.get(ID);
     }
 
     public Payload setSubject(String sub) {
-        data.put(SUBJECT, sub);
+        _data.put(SUBJECT, sub);
         return this;
     }
 
     public String getSubject() {
-        return (String) data.get(SUBJECT);
+        return (String) _data.get(SUBJECT);
     }
 
     public Payload setIssuer(String iss) {
-        data.put(ISSUER, iss);
+        _data.put(ISSUER, iss);
         return this;
     }
 
     public String getIssuer() {
-        return (String) data.get(ISSUER);
+        return (String) _data.get(ISSUER);
     }
 
     public Payload setIssuedAt(Date iat) {
-        data.put(ISSUED_AT, iat);
+        _data.put(ISSUED_AT, iat);
         return this;
     }
 
     public Date getIssuedAt() {
-        return (Date) data.get(ISSUED_AT);
+        return (Date) _data.get(ISSUED_AT);
     }
 
     public Payload setExpiration(Date exp) {
-        data.put(EXPIRATION, exp);
+        _data.put(EXPIRATION, exp);
         return this;
     }
 
     public Date getExpiration() {
-        return (Date) data.get(EXPIRATION);
+        return (Date) _data.get(EXPIRATION);
     }
 
     public Payload setNotBefore(Date nbf) {
-        data.put(NOT_BEFORE, nbf);
+        _data.put(NOT_BEFORE, nbf);
         return this;
     }
 
     public Date getNotBefore() {
-        return (Date) data.get(NOT_BEFORE);
+        return (Date) _data.get(NOT_BEFORE);
     }
 }

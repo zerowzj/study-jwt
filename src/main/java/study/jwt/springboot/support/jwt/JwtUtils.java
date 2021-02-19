@@ -127,7 +127,8 @@ public final class JwtUtils {
         return algorithm;
     }
 
-    public enum VerifyRst {
-        OK, TOKEN_EXPIRED, SIGN_ERROR, FAIL;
+    public enum SignAlg {
+
+        HS256, HS512;
     }
 }
