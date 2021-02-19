@@ -16,10 +16,11 @@ public class LoginService {
 
     public String login() {
         Payload payload = new Payload();
-        payload.setId("12312")
-                .setSubject("subject")
-                .setIssuer("wzngzhj")
-                .setIssuedAt(new Date())
+        payload
+                //.setId("12312")
+                //.setSubject("subject")
+                //.setIssuer("wzngzhj")
+//                .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 5000));
 
         String token = TokenGenerator.createToken();

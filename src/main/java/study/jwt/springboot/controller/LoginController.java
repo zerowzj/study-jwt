@@ -23,10 +23,7 @@ public class LoginController {
 
     @RequestMapping("/login")
     public Result login() {
-        if (1 == 1) {
-            throw new VException(ErrCode.AUTH_TOKEN_ERROR);
-        }
-        String jwt = loginService.login();
+         String jwt = loginService.login();
         Map<String, Object> data = Maps.newHashMap();
         data.put("jwt", jwt);
         return Results.ok(data);

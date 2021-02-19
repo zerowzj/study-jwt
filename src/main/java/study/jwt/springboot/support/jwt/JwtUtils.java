@@ -79,11 +79,11 @@ public final class JwtUtils {
             ex.printStackTrace();
             //异常转译
             if (ex instanceof TokenExpiredException) {
-                throw new VException(ErrCode.AUTH_RE_LOGIN);
+                throw new VException(ErrCode.AUTH_TOKEN_EXPIRED);
             } else if (ex instanceof SignatureVerificationException) {
-                throw new VException(ErrCode.AUTH_TOKEN_ERROR);
+                throw new VException(ErrCode.AUTH_TOKEN_EMPTY_ERROR);
             } else {
-                throw new VException(ErrCode.AUTH_TOKEN_EXPIRED_ERROR);
+                throw new VException(ErrCode.AUTH_TOKEN_EXPIRED);
             }
         }
     }
