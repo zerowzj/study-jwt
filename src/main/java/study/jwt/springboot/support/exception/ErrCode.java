@@ -1,4 +1,4 @@
-package study.jwt.springboot.support.result;
+package study.jwt.springboot.support.exception;
 
 public enum ErrCode {
 
