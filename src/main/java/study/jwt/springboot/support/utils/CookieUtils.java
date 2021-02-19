@@ -29,7 +29,7 @@ public final class CookieUtils {
     }
 
     /**
-     * 是否包含某Cookie
+     * 是否包含Cookie
      */
     public static boolean contain(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();

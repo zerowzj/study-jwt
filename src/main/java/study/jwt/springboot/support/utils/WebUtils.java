@@ -8,7 +8,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.util.Map;
 
 @Slf4j
 public class WebUtils {
@@ -20,7 +19,7 @@ public class WebUtils {
     }
 
     /**
-     * 转换Http
+     * 转换Http Servlet
      */
     public static HttpServletRequest toHttp(ServletRequest servletRequest) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
