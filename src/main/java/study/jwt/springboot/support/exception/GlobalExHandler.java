@@ -13,7 +13,7 @@ public class GlobalExHandler {
     @ExceptionHandler(Throwable.class)
     public Result resolveException(Exception ex) {
         log.error("", ex);
-        if (ex instanceof VException) {
+        if (ex instanceof VException) { //验证异常
             VException vex = (VException) ex;
             //参数名
             String[] name = vex.getName();
@@ -23,7 +23,7 @@ public class GlobalExHandler {
             String code = errCode.getCode();
             String desc = String.format(errCode.getMessage(), name);
             return Results.fail(code, desc);
-        } else {
+        } else { //其他异常
             return Results.fail();
         }
     }

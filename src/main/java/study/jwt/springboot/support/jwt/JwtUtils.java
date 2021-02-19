@@ -77,6 +77,7 @@ public final class JwtUtils {
             verifier.verify(jwt);
         } catch (Exception ex) {
             ex.printStackTrace();
+            //异常转译
             if (ex instanceof TokenExpiredException) {
                 throw new VException(ErrCode.AUTH_RE_LOGIN);
             } else if (ex instanceof SignatureVerificationException) {

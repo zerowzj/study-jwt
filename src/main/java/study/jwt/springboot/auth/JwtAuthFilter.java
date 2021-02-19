@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import study.jwt.springboot.support.exception.ErrCode;
 import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.jwt.JwtUtils;
 import study.jwt.springboot.support.result.Results;
@@ -43,6 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             //Step-1: 验证jwt合法性
             String jwt = request.getHeader(X_JWT);
             JwtUtils.verifyJwt(jwt);
+
             //Step-2: 获取jwt
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
             log.info("{}", JsonUtils.toJson(claims));
@@ -53,9 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         } catch (Exception ex) {
             if (ex instanceof VException) {
                 VException vex = (VException) ex;
-                //错误码
-                ErrCode errCode = vex.getErrCode();
-                WebUtils.write(response, Results.fail(errCode));
+                WebUtils.write(response, Results.fail(vex.getErrCode()));
             } else {
                 throw ex;
             }

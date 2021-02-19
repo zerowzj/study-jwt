@@ -10,7 +10,7 @@ public class VException extends RuntimeException {
     private ErrCode errCode;
 
     public VException(ErrCode errCode) {
-        this(new String[0], errCode);
+        this("", errCode);
     }
 
     public VException(String name, ErrCode errCode) {
