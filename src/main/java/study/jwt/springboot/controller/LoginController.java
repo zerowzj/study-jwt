@@ -28,7 +28,14 @@ public class LoginController {
     }
 
     @RequestMapping("/logout")
-    public Result logout(@RequestHeader("X-Token") String token){
+    public Result logout(@RequestHeader("X-Token") String token) {
+        return Results.ok();
+    }
+
+    @RequestMapping("/throwEx")
+    public Result throwEx() {
+        String str = null;
+
         return Results.ok();
     }
 }
