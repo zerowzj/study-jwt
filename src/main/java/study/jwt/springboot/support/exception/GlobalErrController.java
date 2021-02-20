@@ -1,6 +1,5 @@
 package study.jwt.springboot.support.exception;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 import study.jwt.springboot.support.result.Result;
 import study.jwt.springboot.support.result.Results;
+import study.jwt.springboot.support.utils.JsonUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,9 +46,6 @@ class GlobalErrController implements ErrorController {
     @RequestMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Result error(HttpServletRequest request, HttpServletResponse response) {
-        //状态码
-        int statusCode = (int) request.getAttribute(KEY_STATUS_CODE);
-        log.info("status_code= {}", statusCode);
         //解析 VException
         Exception ex = (Exception) request.getAttribute(KEY_EXCEPTION);
         if (ex != null && ex instanceof VException) {
@@ -57,11 +54,24 @@ class GlobalErrController implements ErrorController {
             VException vex = (VException) ex;
             return Results.fail(vex);
         }
-        //
-        ServletWebRequest requestAttributes = new ServletWebRequest(request);
-        Map<String, Object> errAttr = errorAttributes.getErrorAttributes(requestAttributes, false);
-        log.info("报错信息:" + JSON.toJSONString(errAttr));
 
-        return Results.fail();
+        //判断状态码
+        int statusCode = (int) request.getAttribute(KEY_STATUS_CODE);
+        log.info("status_code= {}", statusCode);
+        Result result = Results.fail();
+        switch (statusCode) {
+            case 404:
+                return result;
+            case 500:
+                return result;
+            default:
+                return result;
+        }
+//        //获取错误信息
+//        ServletWebRequest requestAttributes = new ServletWebRequest(request);
+//        Map<String, Object> errAttr = errorAttributes.getErrorAttributes(requestAttributes, false);
+//        log.info("报错信息: {}", JsonUtils.toJson(errAttr));
+//
+//        return Results.fail();
     }
 }
