@@ -13,10 +13,10 @@ public class GlobalExHandler {
     @ExceptionHandler(Throwable.class)
     public Result resolveException(Exception ex) {
         log.error("", ex);
-        if (ex instanceof VException) { //验证异常
+        if (ex instanceof VException) { //VException
             VException vex = (VException) ex;
             return Results.fail(vex);
-        } else { //其他异常
+        } else { //other Exception
             return Results.fail();
         }
     }
