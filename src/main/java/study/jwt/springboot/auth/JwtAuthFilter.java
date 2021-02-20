@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.jwt.springboot.support.exception.VException;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
+@Order(1)
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final String X_TOKEN = "X-Token";
