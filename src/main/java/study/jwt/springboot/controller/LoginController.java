@@ -21,7 +21,7 @@ public class LoginController {
 
     @RequestMapping("/login")
     public Result login() {
-         String jwt = loginService.login();
+        String jwt = loginService.login();
         Map<String, Object> data = Maps.newHashMap();
         data.put("jwt", jwt);
         return Results.ok(data);

@@ -13,6 +13,8 @@ public class Results {
 
     /**
      * 成功
+     *
+     * @return Result
      */
     public static Result ok() {
         return ok(EMPTY_DATA);
@@ -22,6 +24,7 @@ public class Results {
      * 成功
      *
      * @param data
+     * @return Result
      */
     public static Result ok(Map<String, Object> data) {
         return build(ErrCode.SUCCESS, data);
@@ -29,14 +32,18 @@ public class Results {
 
     /**
      * 失败
+     *
+     * @return Result
      */
     public static Result fail() {
-        return fail(ErrCode.SYS_EXCEPTION);
+        return build(ErrCode.SYS_EXCEPTION);
     }
+
     /**
      * 失败
      *
      * @param vex
+     * @return Result
      */
     public static Result fail(VException vex) {
         //参数名
@@ -49,13 +56,21 @@ public class Results {
         return fail(code, desc);
     }
 
-    public static Result fail(ErrCode errCode) {
-        String code = errCode.getCode();
-        String desc = errCode.getMessage();
-        return fail(code, desc);
+    /**
+     * 失败
+     *
+     * @param code
+     * @param desc
+     * @return Result
+     */
+    public static Result fail(String code, String desc) {
+        return build(code, desc, EMPTY_DATA);
     }
 
-    public static Result fail(String code, String desc) {
+    //===============================================
+    private static Result build(ErrCode errCode) {
+        String code = errCode.getCode();
+        String desc = errCode.getMessage();
         return build(code, desc, EMPTY_DATA);
     }
 
