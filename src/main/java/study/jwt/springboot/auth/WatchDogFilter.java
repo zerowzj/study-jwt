@@ -24,9 +24,6 @@ public class WatchDogFilter extends OncePerRequestFilter {
         Stopwatch stopwatch = Stopwatch.createStarted();
         String uri = request.getRequestURI();
         try {
-//            if (1 == 1) {
-//                throw new IllegalStateException("222");
-//            }
             doFilter(request, response, filterChain);
         } finally {
             log.info("[{}] cost time [{}] ms", uri, stopwatch.elapsed(TimeUnit.MILLISECONDS));

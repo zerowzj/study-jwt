@@ -8,9 +8,7 @@ import study.jwt.springboot.support.jwt.JwtUtils;
 import study.jwt.springboot.support.jwt.Payload;
 import study.jwt.springboot.support.utils.TokenGenerator;
 
-import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -34,7 +32,7 @@ public class LoginService {
         claims.put("email", "wangzhenjun3@xdf.cn");
         claims.put("token", token);
         payload.setClaims(claims);
-        stopwatch.reset();
+        stopwatch.reset().start();
         String jwt = JwtUtils.createJwt(payload);
         log.info("jwt cost time {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         return jwt;
