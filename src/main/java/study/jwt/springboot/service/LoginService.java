@@ -21,7 +21,7 @@ public class LoginService {
                 //.setSubject("subject")
                 //.setIssuer("wzngzhj")
 //                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 5000));
+                .setExpiration(new Date(System.currentTimeMillis() + 500*1000));
 
         String token = TokenGenerator.createToken();
         Map<String, String> claims = Maps.newHashMap();

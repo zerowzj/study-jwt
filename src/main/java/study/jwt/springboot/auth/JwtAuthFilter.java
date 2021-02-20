@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.jwt.springboot.support.exception.ErrCode;
-import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.jwt.JwtUtils;
 import study.jwt.springboot.support.result.Results;
 import study.jwt.springboot.support.utils.JsonUtils;
@@ -57,12 +56,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             doFilter(request, response, filterChain);
         } catch (Exception ex) {
-            if (ex instanceof VException) {
-                VException vex = (VException) ex;
-                WebUtils.write(response, Results.fail(vex.getErrCode()));
-            } else {
-                throw ex;
-            }
+            throw ex;
         }
     }
 }
