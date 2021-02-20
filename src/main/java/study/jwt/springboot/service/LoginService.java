@@ -27,7 +27,8 @@ public class LoginService {
 //                .setExpiration(new Date(System.currentTimeMillis() + 500*1000));
 
         Stopwatch stopwatch = Stopwatch.createStarted();
-        String token = UUID.randomUUID().toString();
+//        String token = UUID.randomUUID().toString();
+        String token = TokenGenerator.createToken();
         log.info("token cost time {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         Map<String, String> claims = Maps.newHashMap();
         claims.put("email", "wangzhenjun3@xdf.cn");
