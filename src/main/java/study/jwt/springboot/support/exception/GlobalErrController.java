@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 import study.jwt.springboot.support.result.Results;
 import study.jwt.springboot.support.utils.JsonUtils;
-import study.jwt.springboot.support.utils.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,14 +45,17 @@ class GlobalErrController implements ErrorController {
     @RequestMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Object error(HttpServletRequest request, HttpServletResponse response) {
-        //解析 VException
+        //解析 Exception
         Exception ex = (Exception) request.getAttribute(KEY_EXCEPTION);
-        if (ex != null && ex instanceof VException) {
-//            log.error("", ex);
-            //
-            VException vex = (VException) ex;
-            WebUtils.write(response, Results.fail(vex));
-            return Results.fail(vex);
+        if (ex != null) {
+            if (ex instanceof VException) {
+                //VException
+                VException vex = (VException) ex;
+                return Results.fail(vex);
+            } else {
+                //other Exception
+                return Results.fail();
+            }
         } else {
             ServletWebRequest requestAttributes = new ServletWebRequest(request);
             Map<String, Object> errAttr = errorAttributes.getErrorAttributes(requestAttributes, false);
