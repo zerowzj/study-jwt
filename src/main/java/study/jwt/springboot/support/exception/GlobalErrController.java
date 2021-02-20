@@ -46,6 +46,9 @@ class GlobalErrController implements ErrorController {
     @RequestMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Result error(HttpServletRequest request, HttpServletResponse response) {
+        //状态码
+        int statusCode = (int) request.getAttribute(KEY_STATUS_CODE);
+        log.info("status_code= {}", statusCode);
         //解析 VException
         Exception ex = (Exception) request.getAttribute(KEY_EXCEPTION);
         if (ex != null && ex instanceof VException) {
@@ -55,8 +58,6 @@ class GlobalErrController implements ErrorController {
             return Results.fail(vex);
         }
         //
-        int statusCode = (int) request.getAttribute(KEY_STATUS_CODE);
-        log.info("status_code= {}", statusCode);
         ServletWebRequest requestAttributes = new ServletWebRequest(request);
         Map<String, Object> errAttr = errorAttributes.getErrorAttributes(requestAttributes, false);
         log.info("报错信息:" + JSON.toJSONString(errAttr));
