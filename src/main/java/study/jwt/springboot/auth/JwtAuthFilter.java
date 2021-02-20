@@ -1,10 +1,10 @@
 package study.jwt.springboot.auth;
 
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.util.Strings;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.jwt.JwtUtils;
@@ -33,17 +33,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         //ignore auth
         String uri = request.getRequestURI();
-        if (CollectionUtils.contains(authIgnoreLt.iterator(), uri)) {
+        if (CollectionUtils.containsAny(authIgnoreLt, uri)) {
             log.info(">>>>>> [{}] ignore auth!", uri);
             doFilter(request, response, filterChain);
             return;
         }
         try {
-            //Step-1: 验证jwt
             String jwt = request.getHeader(X_TOKEN);
             if (Strings.isNullOrEmpty(jwt)) {
                 throw new VException(ErrCode.AUTH_TOKEN_EMPTY_ERROR);
             }
+
+            //Step-1: 验证jwt
             JwtUtils.verifyJwt(jwt);
             //Step-2: 获取jwt
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
