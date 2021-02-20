@@ -26,6 +26,8 @@ import java.util.Map;
 @Controller
 class GlobalErrController implements ErrorController {
 
+    private static final String PATH = "/error";
+
     private static final String KEY_STATUS_CODE = "javax.servlet.error.status_code";
 
     private static final String KEY_EXCEPTION = "javax.servlet.error.exception";
@@ -37,25 +39,26 @@ class GlobalErrController implements ErrorController {
 
     @Override
     public String getErrorPath() {
-        return "/error";
+        return PATH;
     }
 
-    @RequestMapping(value = "/error", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Result error(HttpServletRequest request) {
         int statusCode = (int) request.getAttribute(KEY_STATUS_CODE);
-        Exception ex = (Exception) request.getAttribute(KEY_EXCEPTION);
-        log.info("statueCode= {}, msg={}", statusCode, ex != null ? ex.getMessage() : "");
-        log.error("", ex);
-        try {
-            ServletWebRequest requestAttributes = new ServletWebRequest(request);
-            Map<String, Object> attr = this.errorAttributes.getErrorAttributes(requestAttributes, false);
-            log.info("报错信息:" + JSON.toJSONString(attr));
-        } catch (Exception e) {
-            log.error("获取异常信息错误", e);
-        }
+        log.info("status_code= {}", statusCode);
 
+        //解析 VException
+        Exception ex = (Exception) request.getAttribute(KEY_EXCEPTION);
+        if (ex != null && ex instanceof VException) {
+//            log.error("", ex);
+            //
+            VException vex = (VException) ex;
+            return Results.fail(vex);
+        }
+        ServletWebRequest requestAttributes = new ServletWebRequest(request);
+        Map<String, Object> errAttr = errorAttributes.getErrorAttributes(requestAttributes, false);
+        log.info("报错信息:" + JSON.toJSONString(errAttr));
         return Results.fail();
     }
-
 }

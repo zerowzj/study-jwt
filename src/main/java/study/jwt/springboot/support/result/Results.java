@@ -3,6 +3,7 @@ package study.jwt.springboot.support.result;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import study.jwt.springboot.support.exception.ErrCode;
+import study.jwt.springboot.support.exception.VException;
 
 import java.util.Map;
 
@@ -27,6 +28,17 @@ public class Results {
      */
     public static Result fail() {
         return fail(ErrCode.SYS_EXCEPTION);
+    }
+
+    public static Result fail(VException vex) {
+        //参数名
+        String[] name = vex.getName();
+        //错误码
+        ErrCode errCode = vex.getErrCode();
+        //构造 Result
+        String code = errCode.getCode();
+        String desc = String.format(errCode.getMessage(), name);
+        return fail(code, desc);
     }
 
     public static Result fail(ErrCode errCode) {

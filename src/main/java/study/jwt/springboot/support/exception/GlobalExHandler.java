@@ -15,14 +15,7 @@ public class GlobalExHandler {
         log.error("", ex);
         if (ex instanceof VException) { //验证异常
             VException vex = (VException) ex;
-            //参数名
-            String[] name = vex.getName();
-            //错误码
-            ErrCode errCode = vex.getErrCode();
-            //构造 Result
-            String code = errCode.getCode();
-            String desc = String.format(errCode.getMessage(), name);
-            return Results.fail(code, desc);
+            return Results.fail(vex);
         } else { //其他异常
             return Results.fail();
         }
