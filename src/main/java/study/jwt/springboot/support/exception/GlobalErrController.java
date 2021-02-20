@@ -14,6 +14,7 @@ import study.jwt.springboot.support.result.Result;
 import study.jwt.springboot.support.result.Results;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -44,7 +45,7 @@ class GlobalErrController implements ErrorController {
 
     @RequestMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Result error(HttpServletRequest request) {
+    public Result error(HttpServletRequest request, HttpServletResponse response) {
         //解析 VException
         Exception ex = (Exception) request.getAttribute(KEY_EXCEPTION);
         if (ex != null && ex instanceof VException) {
