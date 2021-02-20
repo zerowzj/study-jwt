@@ -7,13 +7,16 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
+import javafx.scene.paint.Stop;
 import lombok.extern.slf4j.Slf4j;
 import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.result.ErrCode;
 import study.jwt.springboot.support.utils.JsonUtils;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public final class JwtUtils {
@@ -38,6 +41,7 @@ public final class JwtUtils {
 
     public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
         log.info("create pay load: {}", JsonUtils.toJson(payload));
+        Stopwatch stopwatch = Stopwatch.createStarted();
         Algorithm algorithm = transform(signAlg, secretKey);
         //生成器
         JWTCreator.Builder builder = JWT.create()
@@ -54,6 +58,7 @@ public final class JwtUtils {
             });
         }
         String jwt = builder.sign(algorithm);
+        log.info(">>>>>> create jwt cost time [{}] ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
         return jwt;
     }
 
