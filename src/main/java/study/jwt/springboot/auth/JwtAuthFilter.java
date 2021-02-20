@@ -50,7 +50,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             JwtUtils.verifyJwt(jwt);
             //Step-2: 获取jwt
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
-            log.info("{}", JsonUtils.toJson(claims));
             String token = claims.get("token");
             log.info(">>>>>> token= {}", token);
 

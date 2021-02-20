@@ -9,8 +9,8 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import study.jwt.springboot.support.result.ErrCode;
 import study.jwt.springboot.support.exception.VException;
+import study.jwt.springboot.support.result.ErrCode;
 import study.jwt.springboot.support.utils.JsonUtils;
 
 import java.util.Map;
@@ -37,7 +37,7 @@ public final class JwtUtils {
     }
 
     public static String createJwt(Payload payload, SignAlg signAlg, String secretKey) {
-        log.info("{}", JsonUtils.toJson(payload));
+        log.info("create pay load: {}", JsonUtils.toJson(payload));
         Algorithm algorithm = transform(signAlg, secretKey);
         //生成器
         JWTCreator.Builder builder = JWT.create()
@@ -83,7 +83,7 @@ public final class JwtUtils {
             } else if (ex instanceof SignatureVerificationException) {
                 throw new VException(ErrCode.AUTH_TOKEN_EMPTY_ERROR);
             } else {
-                throw new VException(ErrCode.AUTH_TOKEN_EXPIRED);
+                throw new VException(ErrCode.AUTH_TOKEN_EMPTY_ERROR);
             }
         }
     }
@@ -95,7 +95,7 @@ public final class JwtUtils {
         //解码器
         DecodedJWT decodedJWT = JWT.decode(jwt);
 //        log.info(" header= {}", decodedJWT.getHeader());
-//        log.info("payload= {}", decodedJWT.getPayload());
+        //log.info("parse pay load= {}", decodedJWT.getPayload());
 //        log.info("   sign= {}", decodedJWT.getSignature());
         //
         Map<String, String> claims = Maps.newHashMap();
@@ -103,6 +103,7 @@ public final class JwtUtils {
             claims.put(k, v.asString());
         });
 //        log.info(" claims= {}", JsonUtils.toJson(claims));
+        log.info("parse pay load: {}", JsonUtils.toJson(claims));
         return claims;
     }
 
