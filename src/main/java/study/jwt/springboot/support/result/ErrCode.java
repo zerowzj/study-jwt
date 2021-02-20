@@ -1,4 +1,4 @@
-package study.jwt.springboot.support.exception;
+package study.jwt.springboot.support.result;
 
 import lombok.Getter;
 

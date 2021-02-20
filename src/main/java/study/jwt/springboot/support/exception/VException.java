@@ -1,6 +1,7 @@
 package study.jwt.springboot.support.exception;
 
 import lombok.Getter;
+import study.jwt.springboot.support.result.ErrCode;
 
 @Getter
 public class VException extends RuntimeException {

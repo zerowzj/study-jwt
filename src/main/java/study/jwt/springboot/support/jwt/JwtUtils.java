@@ -9,7 +9,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import study.jwt.springboot.support.exception.ErrCode;
+import study.jwt.springboot.support.result.ErrCode;
 import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.utils.JsonUtils;
 

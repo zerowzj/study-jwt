@@ -2,7 +2,6 @@ package study.jwt.springboot.support.result;
 
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import study.jwt.springboot.support.exception.ErrCode;
 import study.jwt.springboot.support.exception.VException;
 
 import java.util.Map;
@@ -19,6 +18,11 @@ public class Results {
         return ok(EMPTY_DATA);
     }
 
+    /**
+     * 成功
+     *
+     * @param data
+     */
     public static Result ok(Map<String, Object> data) {
         return build(ErrCode.SUCCESS, data);
     }
@@ -29,7 +33,11 @@ public class Results {
     public static Result fail() {
         return fail(ErrCode.SYS_EXCEPTION);
     }
-
+    /**
+     * 失败
+     *
+     * @param vex
+     */
     public static Result fail(VException vex) {
         //参数名
         String[] name = vex.getName();
@@ -42,17 +50,16 @@ public class Results {
     }
 
     public static Result fail(ErrCode errCode) {
-        return build(errCode, EMPTY_DATA);
+        String code = errCode.getCode();
+        String desc = errCode.getMessage();
+        return fail(code, desc);
     }
 
     public static Result fail(String code, String desc) {
         return build(code, desc, EMPTY_DATA);
     }
 
-    /**
-     * 构造结果
-     */
-    public static Result build(ErrCode errCode, Object data) {
+    private static Result build(ErrCode errCode, Object data) {
         String code = errCode.getCode();
         String desc = errCode.getMessage();
         return build(code, desc, data);

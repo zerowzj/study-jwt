@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import study.jwt.springboot.support.exception.ErrCode;
+import study.jwt.springboot.support.result.ErrCode;
+import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.jwt.JwtUtils;
-import study.jwt.springboot.support.result.Results;
 import study.jwt.springboot.support.utils.JsonUtils;
-import study.jwt.springboot.support.utils.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -43,8 +42,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             //Step-1: 验证jwt合法性
             String jwt = request.getHeader(X_TOKEN);
             if (Strings.isNullOrEmpty(jwt)) {
-                WebUtils.write(response, Results.fail(ErrCode.AUTH_TOKEN_EMPTY_ERROR));
-                return;
+                throw new VException(ErrCode.AUTH_TOKEN_EMPTY_ERROR);
+//                WebUtils.write(response, Results.fail(ErrCode.AUTH_TOKEN_EMPTY_ERROR));
+//                return;
             }
             JwtUtils.verifyJwt(jwt);
 
