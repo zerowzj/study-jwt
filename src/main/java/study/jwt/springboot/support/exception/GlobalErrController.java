@@ -8,14 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.ServletWebRequest;
 import study.jwt.springboot.support.result.Result;
 import study.jwt.springboot.support.result.Results;
-import study.jwt.springboot.support.utils.JsonUtils;
+import study.jwt.springboot.support.utils.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * 1.注解 @ControllerAdvice 方式只能处理控制器抛出的异常，此时请求已经进入控制器中
@@ -43,30 +41,22 @@ class GlobalErrController implements ErrorController {
         return PATH;
     }
 
-    @RequestMapping(value = PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Result error(HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = PATH)
+    public void error(HttpServletRequest request, HttpServletResponse response) {
         //解析 VException
         Exception ex = (Exception) request.getAttribute(KEY_EXCEPTION);
         if (ex != null && ex instanceof VException) {
 //            log.error("", ex);
             //
             VException vex = (VException) ex;
-            return Results.fail(vex);
+            WebUtils.write(response, Results.fail(vex));
+            return;
         }
 
         //判断状态码
         int statusCode = (int) request.getAttribute(KEY_STATUS_CODE);
         log.info("status_code= {}", statusCode);
-        Result result = Results.fail();
-        switch (statusCode) {
-            case 404:
-                return result;
-            case 500:
-                return result;
-            default:
-                return result;
-        }
+        WebUtils.sendError(response, statusCode);
 //        //获取错误信息
 //        ServletWebRequest requestAttributes = new ServletWebRequest(request);
 //        Map<String, Object> errAttr = errorAttributes.getErrorAttributes(requestAttributes, false);
