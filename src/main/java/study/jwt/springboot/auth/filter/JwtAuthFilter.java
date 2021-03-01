@@ -51,7 +51,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             //Step-2: 获取jwt
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
             String token = claims.get("token");
-            log.info(">>>>>> token= {}", token);
+            String email = claims.get("email");
+            log.info(">>>>>> token= {}, email= {}", token, email);
+
             //Step-3: 设置session
             UserSessionInfo sessionInfo = new UserSessionInfo();
             UserContext.set(sessionInfo);
