@@ -28,7 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final String X_TOKEN = "X-Token";
 
-    @Value("#{'${auth.ignoreList}'.split(',')}")
+    @Value("${auth.ignore-list}")
     private List<String> authIgnoreLt;
 
     @Override
@@ -46,18 +46,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (Strings.isNullOrEmpty(jwt)) {
                 throw new VException(ErrCode.AUTH_TOKEN_EMPTY_ERROR);
             }
-
             //Step-1: 验证jwt
             JwtUtils.verifyJwt(jwt);
             //Step-2: 获取jwt
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
             String token = claims.get("token");
             log.info(">>>>>> token= {}", token);
-
-            //Step-3:
+            //Step-3: 设置session
             UserSessionInfo sessionInfo = new UserSessionInfo();
             UserContext.set(sessionInfo);
 
+            //next filter
             doFilter(request, response, filterChain);
         } catch (Exception ex) {
             throw ex;

@@ -13,4 +13,4 @@ spring:
     banner-mode: off
 #
 auth:
-  ignoreList: /login
+  ignore-list: /login,/error

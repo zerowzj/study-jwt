@@ -9,12 +9,12 @@ public class UserContext {
     private static final TransmittableThreadLocal<UserSessionInfo> LOCAL = new TransmittableThreadLocal<UserSessionInfo>() {
         @Override
         protected void beforeExecute() {
-            log.info("before execute");
+            log.info(">>>>>> before execute >>>>>>");
         }
 
         @Override
         protected void afterExecute() {
-            log.info("after execute");
+            log.info(">>>>>> after execute >>>>>>");
         }
     };
 
