@@ -60,7 +60,7 @@
             <version>4.0.1</version>
         </dependency>
         <!-- ============================== -->
-        <!--（★）transmittable-thread-local                       -->
+        <!--（★）transmittable thread-local -->
         <!-- ============================== -->
         <dependency>
             <groupId>com.alibaba</groupId>
