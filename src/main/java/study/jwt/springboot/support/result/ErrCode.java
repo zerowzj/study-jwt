@@ -29,10 +29,10 @@ public enum ErrCode {
 
     private String code;
 
-    private String message;
+    private String msg;
 
-    ErrCode(String code, String message) {
+    ErrCode(String code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 }

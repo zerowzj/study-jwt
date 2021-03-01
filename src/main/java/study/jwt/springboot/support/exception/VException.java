@@ -19,7 +19,7 @@ public class VException extends RuntimeException {
     }
 
     public VException(String[] name, ErrCode errCode) {
-        super(String.format(errCode.getMessage(), name));
+        super(String.format(errCode.getMsg(), name));
         this.name = name;
         this.errCode = errCode;
     }

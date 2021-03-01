@@ -52,7 +52,7 @@ public class Results {
         ErrCode errCode = vex.getErrCode();
         //构造 Result
         String code = errCode.getCode();
-        String desc = String.format(errCode.getMessage(), name);
+        String desc = String.format(errCode.getMsg(), name);
         return fail(code, desc);
     }
 
@@ -70,13 +70,13 @@ public class Results {
     //===============================================
     private static Result build(ErrCode errCode) {
         String code = errCode.getCode();
-        String desc = errCode.getMessage();
+        String desc = errCode.getMsg();
         return build(code, desc, EMPTY_DATA);
     }
 
     private static Result build(ErrCode errCode, Object data) {
         String code = errCode.getCode();
-        String desc = errCode.getMessage();
+        String desc = errCode.getMsg();
         return build(code, desc, data);
     }
 
