@@ -1,4 +1,4 @@
-package study.jwt.springboot.auth;
+package study.jwt.springboot.auth.filter;
 
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import study.jwt.springboot.auth.user.UserContext;
+import study.jwt.springboot.auth.user.UserSessionInfo;
 import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.jwt.JwtUtils;
 import study.jwt.springboot.support.result.ErrCode;
-import study.jwt.springboot.support.utils.JsonUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -52,6 +53,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Map<String, String> claims = JwtUtils.parseJwt(jwt);
             String token = claims.get("token");
             log.info(">>>>>> token= {}", token);
+
+            //Step-3:
+            UserSessionInfo sessionInfo = new UserSessionInfo();
+            UserContext.set(sessionInfo);
 
             doFilter(request, response, filterChain);
         } catch (Exception ex) {
