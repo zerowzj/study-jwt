@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import study.jwt.springboot.auth.user.UserContext;
-import study.jwt.springboot.auth.user.UserSessionInfo;
 import study.jwt.springboot.support.exception.VException;
 import study.jwt.springboot.support.jwt.JwtUtils;
 import study.jwt.springboot.support.result.ErrCode;
@@ -55,8 +53,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.info(">>>>>> token= {}, email= {}", token, email);
 
             //Step-3: 设置session
-            UserSessionInfo sessionInfo = new UserSessionInfo();
-            UserContext.set(sessionInfo);
 
             //next filter
             doFilter(request, response, filterChain);
